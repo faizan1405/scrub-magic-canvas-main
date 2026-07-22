@@ -1,8 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import heroVideoAsset from "@/assets/hero.mp4.asset.json";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -124,7 +122,7 @@ export function Hero() {
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-ink">
         <video
           ref={videoRef}
-          src={heroVideoAsset.url}
+          src="/hero.mp4"
           muted
           playsInline
           preload="none"
