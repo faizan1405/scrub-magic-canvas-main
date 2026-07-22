@@ -10,6 +10,7 @@ export function CustomCursor() {
   const sy = useSpring(y, { damping: 35, stiffness: 500, mass: 0.2 });
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     if (window.matchMedia("(pointer: coarse)").matches) return;
     setVisible(true);
     let raf = 0;

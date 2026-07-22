@@ -3,8 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
-
 const phases = [
   {
     heading: "Spaces That Tell Your Story",
@@ -34,6 +32,9 @@ export function Hero() {
   const [phase, setPhase] = useState(0);
 
   useEffect(() => {
+    // Only register GSAP plugins on the client side (not during SSR)
+    if (typeof window === "undefined") return;
+    gsap.registerPlugin(ScrollTrigger);
     const video = videoRef.current;
     const container = containerRef.current;
     if (!video || !container) return;
