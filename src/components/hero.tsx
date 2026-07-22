@@ -125,7 +125,8 @@ export function Hero() {
           src="/hero.mp4"
           muted
           playsInline
-          preload="none"
+          preload="metadata"
+          autoPlay
           disablePictureInPicture
           className="absolute inset-0 h-full w-full object-cover"
           style={{
