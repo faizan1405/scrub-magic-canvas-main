@@ -1,18 +1,18 @@
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { MagneticButton } from "./magnetic-button";
-
-const links = [
-  { href: "#about", label: "About" },
-  { href: "#services", label: "Services" },
-  { href: "#projects", label: "Projects" },
-  { href: "#process", label: "Process" },
-  { href: "#contact", label: "Contact" },
-];
 
 export function Navigation() {
   const [solid, setSolid] = useState(false);
   const [active, setActive] = useState("about");
+
+  const links = [
+    { href: "#about", label: "About" },
+    { href: "#services", label: "Services" },
+    { href: "#projects", label: "Projects" },
+    { href: "#process", label: "Process" },
+    { href: "#contact", label: "Contact" },
+  ];
 
   useEffect(() => {
     let ticking = false;

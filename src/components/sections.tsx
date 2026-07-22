@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, memo } from "react";
 import { Reveal, AnimatedCounter } from "./reveal";
 import { MagneticButton } from "./magnetic-button";
 import aboutImg from "@/assets/about.jpg";
@@ -12,13 +12,13 @@ import p5 from "@/assets/project-5.jpg";
 import p6 from "@/assets/project-6.jpg";
 
 /* ==================== ABOUT ==================== */
-export function About() {
+export const About = memo(function About() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
   return (
-    <section id="about" ref={ref} className="relative overflow-hidden bg-cream py-32 md:py-48">
+    <section id="about" ref={ref} className="relative overflow-hidden bg-cream py-32 md:py-48" style={{ contentVisibility: "auto", containIntrinsicSize: "100px" }}>
       <div className="mx-auto grid max-w-[1600px] gap-16 px-6 md:grid-cols-12 md:gap-20 md:px-12">
         <div className="md:col-span-5 md:sticky md:top-32 md:h-fit">
           <div className="relative aspect-[4/5] overflow-hidden rounded-sm">
@@ -96,7 +96,7 @@ export function About() {
       </div>
     </section>
   );
-}
+});
 
 /* ==================== SERVICES ==================== */
 const services = [
@@ -108,9 +108,9 @@ const services = [
   { n: "06", t: "Turnkey Execution", d: "End-to-end delivery from concept sketch to final key handover.", img: p3 },
 ];
 
-export function Services() {
+export const Services = memo(function Services() {
   return (
-    <section id="services" className="relative bg-sand py-32 md:py-48">
+    <section id="services" className="relative bg-sand py-32 md:py-48" style={{ contentVisibility: "auto", containIntrinsicSize: "100px" }}>
       <div className="mx-auto max-w-[1600px] px-6 md:px-12">
         <div className="mb-24 flex flex-col justify-between gap-8 md:flex-row md:items-end">
           <div>
@@ -133,7 +133,7 @@ export function Services() {
       </div>
     </section>
   );
-}
+});
 
 function ServiceRow({ n, t, d, img }: { n: string; t: string; d: string; img: string; even?: boolean }) {
   const [hover, setHover] = useState(false);
@@ -214,11 +214,11 @@ const projects = [
 ];
 const filters = ["All", "Residential", "Commercial", "Hospitality"];
 
-export function Projects() {
+export const Projects = memo(function Projects() {
   const [f, setF] = useState("All");
   const list = f === "All" ? projects : projects.filter((p) => p.cat === f);
   return (
-    <section id="projects" className="relative bg-cream py-32 md:py-48">
+    <section id="projects" className="relative bg-cream py-32 md:py-48" style={{ contentVisibility: "auto", containIntrinsicSize: "100px" }}>
       <div className="mx-auto max-w-[1600px] px-6 md:px-12">
         <div className="mb-16 flex flex-col justify-between gap-8 md:flex-row md:items-end">
           <div>
@@ -297,7 +297,7 @@ export function Projects() {
       </div>
     </section>
   );
-}
+});
 
 /* ==================== PROCESS ==================== */
 const steps = [
@@ -308,9 +308,9 @@ const steps = [
   { n: "05", t: "Final Delivery", d: "The moment we hand you the key — and the story truly begins." },
 ];
 
-export function Process() {
+export const Process = memo(function Process() {
   return (
-    <section id="process" className="relative bg-ink py-32 text-cream md:py-48">
+    <section id="process" className="relative bg-ink py-32 text-cream md:py-48" style={{ contentVisibility: "auto", containIntrinsicSize: "100px" }}>
       <div className="mx-auto max-w-[1600px] px-6 md:px-12">
         <Reveal>
           <p className="text-eyebrow text-clay">04 — Process</p>
@@ -349,7 +349,7 @@ export function Process() {
       </div>
     </section>
   );
-}
+});
 
 /* ==================== WHY ==================== */
 const why = [
@@ -369,9 +369,9 @@ const whyDesc: Record<string, string> = {
   "Personalized Approach": "One principal architect, personally, from day one to handover.",
 };
 
-export function Why() {
+export const Why = memo(function Why() {
   return (
-    <section className="relative bg-cream py-32 md:py-48">
+    <section className="relative bg-cream py-32 md:py-48" style={{ contentVisibility: "auto", containIntrinsicSize: "100px" }}>
       <div className="mx-auto max-w-[1600px] px-6 md:px-12">
         <Reveal>
           <p className="text-eyebrow text-clay">05 — Why Atelier</p>
@@ -407,7 +407,7 @@ export function Why() {
       </div>
     </section>
   );
-}
+});
 
 /* ==================== TESTIMONIALS ==================== */
 const quotes = [
@@ -417,10 +417,10 @@ const quotes = [
   { q: "Rare to find a studio that speaks the language of restraint. Rarer still that they deliver on time.", a: "Luca B.", r: "Developer, Rome" },
 ];
 
-export function Testimonials() {
+export const Testimonials = memo(function Testimonials() {
   const [i, setI] = useState(0);
   return (
-    <section className="relative overflow-hidden bg-sand py-32 md:py-48">
+    <section className="relative overflow-hidden bg-sand py-32 md:py-48" style={{ contentVisibility: "auto", containIntrinsicSize: "100px" }}>
       <div className="mx-auto max-w-5xl px-6 text-center md:px-12">
         <Reveal>
           <p className="text-eyebrow text-clay">06 — In Their Words</p>
@@ -462,10 +462,10 @@ export function Testimonials() {
       </div>
     </section>
   );
-}
+});
 
 /* ==================== STYLE GUIDE ==================== */
-export function StyleGuide() {
+export const StyleGuide = memo(function StyleGuide() {
   const swatches = [
     { name: "Cream", v: "#f5f1e8" },
     { name: "Sand", v: "#ece5d5" },
@@ -475,7 +475,7 @@ export function StyleGuide() {
     { name: "Ink", v: "#2a2118" },
   ];
   return (
-    <section className="relative bg-cream py-32 md:py-48">
+    <section className="relative bg-cream py-32 md:py-48" style={{ contentVisibility: "auto", containIntrinsicSize: "100px" }}>
       <div className="mx-auto max-w-[1600px] px-6 md:px-12">
         <Reveal>
           <p className="text-eyebrow text-clay">07 — Brand Language</p>
@@ -534,7 +534,7 @@ export function StyleGuide() {
       </div>
     </section>
   );
-}
+});
 
 /* ==================== FAQ ==================== */
 const faqs = [
@@ -545,10 +545,10 @@ const faqs = [
   { q: "Do you collaborate with existing architects?", a: "Frequently. We're comfortable joining a project mid-stream and adapting to the workflow already in place." },
 ];
 
-export function FAQ() {
+export const FAQ = memo(function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <section className="relative bg-sand py-32 md:py-48">
+    <section className="relative bg-sand py-32 md:py-48" style={{ contentVisibility: "auto", containIntrinsicSize: "100px" }}>
       <div className="mx-auto max-w-4xl px-6 md:px-12">
         <Reveal>
           <p className="text-eyebrow text-clay">08 — Questions</p>
@@ -596,7 +596,7 @@ export function FAQ() {
       </div>
     </section>
   );
-}
+});
 
 /* ==================== CONTACT ==================== */
 function Field({ label, type = "text", area = false }: { label: string; type?: string; area?: boolean }) {
@@ -637,9 +637,9 @@ function Field({ label, type = "text", area = false }: { label: string; type?: s
   );
 }
 
-export function Contact() {
+export const Contact = memo(function Contact() {
   return (
-    <section id="contact" className="relative bg-cream py-32 md:py-48">
+    <section id="contact" className="relative bg-cream py-32 md:py-48" style={{ contentVisibility: "auto", containIntrinsicSize: "100px" }}>
       <div className="mx-auto max-w-[1600px] px-6 md:px-12">
         {/* CTA Banner */}
         <Reveal>
@@ -738,10 +738,10 @@ export function Contact() {
       </div>
     </section>
   );
-}
+});
 
 /* ==================== FOOTER ==================== */
-export function Footer() {
+export const Footer = memo(function Footer() {
   return (
     <footer className="relative overflow-hidden bg-ink pt-24 pb-8 text-cream md:pt-32">
       <div className="absolute inset-0 grain-bg opacity-30" />
@@ -792,4 +792,4 @@ export function Footer() {
       </div>
     </footer>
   );
-}
+});

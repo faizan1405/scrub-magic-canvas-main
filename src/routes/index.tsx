@@ -61,7 +61,11 @@ export const Route = createFileRoute("/")({
 
 function ScrollProgress() {
   const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 80,
+    damping: 25,
+    restDelta: 0.01,
+  });
   return (
     <motion.div
       style={{ scaleX }}

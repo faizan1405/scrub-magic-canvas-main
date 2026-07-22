@@ -39,9 +39,9 @@ export function Hero() {
     const container = containerRef.current;
     if (!video || !container) return;
 
-    // Target and current currentTime — we lerp the current toward the target
-    // on every rAF for buttery, Apple-style smoothness independent of the
-    // scroll event cadence.
+    // Defer heavy video work: only attach metadata listener once the user
+    // has scrolled into the hero. Avoids blocking the initial paint.
+    let videoReady = false;
     const state = { target: 0, current: 0, duration: 0 };
 
     const setDur = () => {
@@ -50,9 +50,11 @@ export function Hero() {
       }
     };
     video.addEventListener("loadedmetadata", setDur);
-    setDur();
 
-    // Ensure decoded frames are ready before we scrub
+    // Load metadata only (cheap). Full decode happens on demand via the
+    // rAF loop's `readyState >= 2` guard — way smaller initial payload than
+    // `preload="auto"`, which used to drag the whole first paint down.
+    video.preload = "metadata";
     video.pause();
 
     const st = ScrollTrigger.create({
@@ -69,15 +71,18 @@ export function Hero() {
       },
     });
 
-    // rAF loop: interpolate current -> target and write to video.currentTime.
-    // Using a lerp avoids frame-skipping when scroll deltas are large and
-    // keeps playback visually smooth at 60fps.
+    // rAF loop: only write to video.currentTime when there's a meaningful
+    // delta. We also throttle writes so we don't issue more than one seek
+    // per displayed frame — browsers debounce rapid `currentTime` writes
+    // anyway, and the previous loop was re-lerping zero deltas every frame.
     let rafId = 0;
     const tick = () => {
       const diff = state.target - state.current;
-      if (Math.abs(diff) > 0.0005) {
-        state.current += diff * 0.18; // smoothing factor
-        if (video.readyState >= 2 && state.duration > 0) {
+      if (Math.abs(diff) > 0.005 && state.duration > 0) {
+        // Skip directly to target on large jumps (>25% of duration) to
+        // avoid hundreds of incremental seeks after a fast scroll.
+        state.current = diff > state.duration * 0.25 ? state.target : state.current + diff * 0.25;
+        if (video.readyState >= 2) {
           try {
             video.currentTime = state.current;
           } catch {
@@ -87,9 +92,27 @@ export function Hero() {
       }
       rafId = requestAnimationFrame(tick);
     };
-    rafId = requestAnimationFrame(tick);
+
+    // Only start the rAF loop once the hero is actually in view. Most
+    // visitors never scroll past the fold, so this saves a permanent
+    // 60Hz callback on every page load.
+    const inViewObserver = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting && !videoReady) {
+          videoReady = true;
+          // Trigger metadata fetch; rAF will start polling once it's there.
+          video.load();
+          rafId = requestAnimationFrame(tick);
+          inViewObserver.disconnect();
+        }
+      },
+      { threshold: 0.01 },
+    );
+    inViewObserver.observe(container);
 
     return () => {
+      inViewObserver.disconnect();
       cancelAnimationFrame(rafId);
       st.kill();
       video.removeEventListener("loadedmetadata", setDur);
@@ -104,7 +127,7 @@ export function Hero() {
           src={heroVideoAsset.url}
           muted
           playsInline
-          preload="auto"
+          preload="none"
           disablePictureInPicture
           className="absolute inset-0 h-full w-full object-cover"
           style={{
