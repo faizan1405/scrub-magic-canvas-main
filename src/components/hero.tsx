@@ -54,7 +54,7 @@ export function Hero() {
     // Load metadata only (cheap). Full decode happens on demand via the
     // rAF loop's `readyState >= 2` guard — way smaller initial payload than
     // `preload="auto"`, which used to drag the whole first paint down.
-    video.preload = "metadata";
+    video.preload = "auto";
     video.pause();
 
     const st = ScrollTrigger.create({
@@ -128,7 +128,6 @@ export function Hero() {
           muted
           playsInline
           preload="metadata"
-          autoPlay
           disablePictureInPicture
           className="absolute inset-0 h-full w-full object-cover"
           style={{
