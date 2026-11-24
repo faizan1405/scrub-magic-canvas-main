@@ -65,7 +65,7 @@ export function Navigation() {
             solid ? "text-ink" : "text-cream"
           }`}
         >
-          Atelier<span className="text-clay">.</span>
+          <span className="inline-flex items-center gap-2.5"><img src="/favicon.png" alt="Atelier logo" className="h-7 w-7 rounded-md object-cover shrink-0" /><span>Atelier<span className="text-clay">.</span></span></span>
         </a>
 
         <nav className="hidden items-center gap-1 md:flex">
